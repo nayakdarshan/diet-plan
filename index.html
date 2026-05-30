@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darshan's Diet Blueprint — Low Cost, High Protein</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--card:#161616;--border:#222;--accent:#4aff88;--accent2:#ff6b35;--accent3:#ffd24a;--protein:#4af0ff;--text:#f0f0f0;--muted:#666;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+  .hero{background:linear-gradient(135deg,#0a0a0a 0%,#111 60%,#0d1a12 100%);border-bottom:1px solid var(--border);padding:44px 20px 32px;position:relative;overflow:hidden;}
+  .hero::before{content:'EAT';position:absolute;right:-10px;top:-10px;font-family:'Bebas Neue',sans-serif;font-size:200px;color:#ffffff05;line-height:1;pointer-events:none;}
+  .hero-tag{display:inline-block;background:var(--accent);color:#000;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;letter-spacing:2px;padding:4px 12px;border-radius:2px;margin-bottom:14px;text-transform:uppercase;}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,11vw,90px);line-height:.95;letter-spacing:2px;margin-bottom:14px;}
+  .hero h1 span{color:var(--accent);}
+  .hero-stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;}
+  .stat{display:flex;flex-direction:column;gap:2px;}
+  .stat-val{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:1px;}
+  .stat-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-family:'DM Mono',monospace;}
+  .banner{background:#001a10;border:1px solid #004422;border-left:4px solid var(--accent);padding:14px 18px;margin:18px 14px;border-radius:4px;font-size:13px;color:#7ad0a0;line-height:1.7;}
+  .banner strong{color:var(--accent);}
+  .targets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 14px 6px;}
+  .target{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:12px 10px;text-align:center;}
+  .target .tv{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;line-height:1;}
+  .target .tk{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+  .t-cal .tv{color:var(--accent3);}.t-pro .tv{color:var(--protein);}.t-cost .tv{color:var(--accent);}.t-meals .tv{color:var(--accent2);}
+  .nav-tabs{display:flex;gap:6px;padding:16px 14px 18px;overflow-x:auto;scrollbar-width:none;}
+  .nav-tabs::-webkit-scrollbar{display:none;}
+  .tab{flex-shrink:0;padding:9px 16px;background:var(--card);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);transition:all .2s;text-align:center;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:600;}
+  .panel{display:none;padding:0 14px 60px;}
+  .panel.active{display:block;}
+  .panel-head{margin-bottom:20px;}
+  .panel-title{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;line-height:1;}
+  .panel-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:6px;}
+  .meal{background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;padding:16px;border-left:3px solid var(--accent);}
+  .meal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .meal-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--accent3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+  .meal-name{font-size:18px;font-weight:600;line-height:1.2;}
+  .meal-cost{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--accent);letter-spacing:1px;flex-shrink:0;}
+  .macros{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;}
+  .macro{display:flex;flex-direction:column;background:#0d0d0d;border:1px solid #1e1e1e;border-radius:4px;padding:6px 11px;min-width:62px;}
+  .macro .mv{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;line-height:1;}
+  .macro .mk{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+  .cal .mv{color:var(--accent3);}.pro .mv{color:var(--protein);}.carb .mv{color:#c084fc;}.fat .mv{color:var(--accent2);}
+  .ingredients{background:#0a120c;border:1px solid #143020;border-radius:4px;padding:10px 12px;margin:10px 0;}
+  .ing-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+  .ing-list{display:flex;flex-wrap:wrap;gap:6px;}
+  .ing{font-size:12px;color:#9fd0b0;background:#0d1810;border:1px solid #1a3020;border-radius:3px;padding:3px 8px;}
+  .steps-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px;border-top:1px solid #1a1a1a;padding-top:12px;}
+  .steps{list-style:none;counter-reset:step;}
+  .steps li{position:relative;padding:0 0 9px 30px;font-size:13px;color:#bbb;line-height:1.55;counter-increment:step;}
+  .steps li::before{content:counter(step);position:absolute;left:0;top:0;width:20px;height:20px;background:#001a10;border:1px solid #004422;color:var(--accent);border-radius:50%;font-family:'DM Mono',monospace;font-size:10px;display:flex;align-items:center;justify-content:center;}
+  .steps li strong{color:#fff;}
+  .tip{margin-top:8px;padding:9px 12px;background:#140d00;border:1px solid #2a1d00;border-radius:4px;font-size:12px;color:#d0a868;line-height:1.55;}
+  .tip strong{color:var(--accent2);}
+  .day-total{background:#001a10;border:1px solid #004422;border-radius:6px;padding:14px 16px;margin-top:4px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .day-total .dt-label{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;}
+  .day-total .dt-metrics{display:flex;gap:14px;flex-wrap:wrap;}
+  .day-total .dtm{text-align:center;}
+  .day-total .dtm-v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.5px;line-height:1;}
+  .day-total .dtm-k{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:12px;}
+  .card h3{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--accent);margin-bottom:12px;}
+  .shop-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .shop-table th{text-align:left;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid #222;}
+  .shop-table td{padding:8px;border-bottom:1px solid #161616;color:#ccc;}
+  .shop-table td.price{color:var(--accent);font-family:'DM Mono',monospace;text-align:right;}
+  .shop-table tr:last-child td{border-bottom:none;}
+  .shop-total{margin-top:12px;padding:12px;background:#001a10;border:1px solid #004422;border-radius:4px;display:flex;justify-content:space-between;align-items:center;}
+  .shop-total .stl{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+  .shop-total .stv{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);letter-spacing:1px;}
+  .rule{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #1a1a1a;font-size:13px;color:#bbb;line-height:1.5;}
+  .rule:last-child{border-bottom:none;}
+  .rule .ri{font-size:18px;flex-shrink:0;}
+  .rule strong{color:#fff;}
+  ::-webkit-scrollbar{width:4px;height:4px;}
+  ::-webkit-scrollbar-thumb{background:#333;border-radius:2px;}
+  footer{padding:28px 14px;text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:#2a2a2a;border-top:1px solid #1a1a1a;}
+  @media(max-width:480px){.targets{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">🥗 Low-Cost · High-Protein · Fat Loss</div>
+  <h1>YOUR DIET<br><span>BLUEPRINT</span></h1>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-val">~₹250</span><span class="stat-label">Per Day</span></div>
+    <div class="stat"><span class="stat-val">~1700</span><span class="stat-label">kcal / day</span></div>
+    <div class="stat"><span class="stat-val">130+ KG</span><span class="stat-label">Start Weight</span></div>
+    <div class="stat"><span class="stat-val">FAT LOSS</span><span class="stat-label">Goal</span></div>
+  </div>
+</div>
+
+<div class="banner"><strong>📌 How this works:</strong> High protein keeps you full and protects muscle while you lose fat. A modest calorie deficit (~1700 kcal) drives steady weight loss. Cheap staples — eggs, chicken, dal, oats, curd. Two meal options per slot so you don't get bored. Drink 3–4 L water daily.</div>
+
+<div class="targets">
+  <div class="target t-cal"><div class="tv">~1700</div><div class="tk">Calories</div></div>
+  <div class="target t-pro"><div class="tv">~150g</div><div class="tk">Protein</div></div>
+  <div class="target t-cost"><div class="tv">~₹250</div><div class="tk">Daily Cost</div></div>
+  <div class="target t-meals"><div class="tv">4</div><div class="tk">Meals/Day</div></div>
+</div>
+
+<div class="nav-tabs">
+  <div class="tab active" onclick="show('day')">📅 Daily Plan</div>
+  <div class="tab" onclick="show('shop')">🛒 Shopping List</div>
+  <div class="tab" onclick="show('rules')">📖 Rules &amp; Swaps</div>
+</div>
+
+<!-- DAILY PLAN -->
+<div id="p-day" class="panel active">
+  <div class="panel-head"><div class="panel-title">A FULL DAY</div><div class="panel-sub">4 meals · ~1700 kcal · ~150g protein · ~₹250</div></div>
+
+  <!-- BREAKFAST -->
+  <div class="meal">
+    <div class="meal-top">
+      <div><div class="meal-time">⏰ 8:00 AM · Breakfast</div><div class="meal-name">Veg Masala Oats + 3 Boiled Eggs</div></div>
+      <div class="meal-cost">₹45</div>
+    </div>
+    <div class="macros">
+      <div class="macro cal"><span class="mv">430</span><span class="mk">kcal</span></div>
+      <div class="macro pro"><span class="mv">28g</span><span class="mk">Protein</span></div>
+      <div class="macro carb"><span class="mv">45g</span><span class="mk">Carbs</span></div>
+      <div class="macro fat"><span class="mv">14g</span><span class="mk">Fat</span></div>
+    </div>
+    <div class="ingredients">
+      <div class="ing-title">Ingredients</div>
+      <div class="ing-list"><span class="ing">50g oats</span><span class="ing">3 eggs</span><span class="ing">½ onion</span><span class="ing">½ tomato</span><span class="ing">green chilli</span><span class="ing">turmeric + salt</span><span class="ing">1 tsp oil</span></div>
+    </div>
+    <div class="steps-title">How to prepare</div>
+    <ol class="steps">
+      <li>Put 3 eggs in a pot, cover with water, boil 8–10 min. Cool, peel.</li>
+      <li>Heat 1 tsp oil in a pan. Add chopped onion, chilli — sauté 2 min.</li>
+      <li>Add chopped tomato, pinch of turmeric and salt. Cook 2 min until soft.</li>
+      <li>Add 50g oats + 1 cup water. Stir and simmer 4–5 min until thick.</li>
+      <li>Eat the oats hot, with the 3 boiled eggs on the side.</li>
+    </ol>
+    <div class="tip"><strong>Tip:</strong> Eat 2 whole eggs + 1 egg if you want lower fat — egg whites are pure protein. Boil 6 eggs at once and refrigerate to save time.</div>
+  </div>
+
+  <!-- LUNCH -->
+  <div class="meal">
+    <div class="meal-top">
+      <div><div class="meal-time">⏰ 1:00 PM · Lunch</div><div class="meal-name">Grilled Chicken + Rice + Dal</div></div>
+      <div class="meal-cost">₹85</div>
+    </div>
+    <div class="macros">
+      <div class="macro cal"><span class="mv">580</span><span class="mk">kcal</span></div>
+      <div class="macro pro"><span class="mv">52g</span><span class="mk">Protein</span></div>
+      <div class="macro carb"><span class="mv">62g</span><span class="mk">Carbs</span></div>
+      <div class="macro fat"><span class="mv">12g</span><span class="mk">Fat</span></div>
+    </div>
+    <div class="ingredients">
+      <div class="ing-title">Ingredients</div>
+      <div class="ing-list"><span class="ing">150g chicken breast</span><span class="ing">60g rice (raw)</span><span class="ing">40g dal/moong</span><span class="ing">curd 100g</span><span class="ing">ginger-garlic</span><span class="ing">spices</span><span class="ing">1 tsp oil</span></div>
+    </div>
+    <div class="steps-title">How to prepare</div>
+    <ol class="steps">
+      <li>Cut 150g chicken breast into pieces. Marinate 15 min in curd, ginger-garlic, salt, chilli powder, turmeric.</li>
+      <li>Use your <strong>oven</strong>: bake at 200°C for 18–20 min, OR pan-grill with 1 tsp oil until cooked through (no pink inside).</li>
+      <li>Cook 60g rice in 1.5 cups water until soft (~15 min).</li>
+      <li>Boil 40g dal with water, turmeric, salt until soft; temper with a little garlic.</li>
+      <li>Plate the rice, dal, and grilled chicken together. Eat warm.</li>
+    </ol>
+    <div class="tip"><strong>Tip:</strong> Chicken breast is the cheapest protein per gram. Buy 1 kg, portion into 150g packs and freeze — pull one out the night before.</div>
+  </div>
+
+  <!-- SNACK -->
+  <div class="meal">
+    <div class="meal-top">
+      <div><div class="meal-time">⏰ 5:00 PM · Pre/Post Workout Snack</div><div class="meal-name">Curd + Banana + Roasted Chana</div></div>
+      <div class="meal-cost">₹35</div>
+    </div>
+    <div class="macros">
+      <div class="macro cal"><span class="mv">320</span><span class="mk">kcal</span></div>
+      <div class="macro pro"><span class="mv">18g</span><span class="mk">Protein</span></div>
+      <div class="macro carb"><span class="mv">48g</span><span class="mk">Carbs</span></div>
+      <div class="macro fat"><span class="mv">6g</span><span class="mk">Fat</span></div>
+    </div>
+    <div class="ingredients">
+      <div class="ing-title">Ingredients</div>
+      <div class="ing-list"><span class="ing">200g curd</span><span class="ing">1 banana</span><span class="ing">40g roasted chana</span></div>
+    </div>
+    <div class="steps-title">How to prepare</div>
+    <ol class="steps">
+      <li>Scoop 200g plain curd into a bowl.</li>
+      <li>Slice 1 banana into it.</li>
+      <li>Eat the roasted chana (roasted chickpeas) on the side as a crunchy protein hit.</li>
+      <li>Have this ~45 min before the gym for energy, or right after for recovery.</li>
+    </ol>
+    <div class="tip"><strong>Tip:</strong> Roasted chana is dirt cheap, shelf-stable, and high protein. Keep a packet in your gym bag.</div>
+  </div>
+
+  <!-- DINNER -->
+  <div class="meal">
+    <div class="meal-top">
+      <div><div class="meal-time">⏰ 8:30 PM · Dinner</div><div class="meal-name">Egg Bhurji + 2 Roti + Salad</div></div>
+      <div class="meal-cost">₹50</div>
+    </div>
+    <div class="macros">
+      <div class="macro cal"><span class="mv">420</span><span class="mk">kcal</span></div>
+      <div class="macro pro"><span class="mv">26g</span><span class="mk">Protein</span></div>
+      <div class="macro carb"><span class="mv">40g</span><span class="mk">Carbs</span></div>
+      <div class="macro fat"><span class="mv">16g</span><span class="mk">Fat</span></div>
+    </div>
+    <div class="ingredients">
+      <div class="ing-title">Ingredients</div>
+      <div class="ing-list"><span class="ing">3 eggs</span><span class="ing">2 wheat roti</span><span class="ing">onion + tomato</span><span class="ing">cucumber</span><span class="ing">green chilli</span><span class="ing">spices</span><span class="ing">1 tsp oil</span></div>
+    </div>
+    <div class="steps-title">How to prepare</div>
+    <ol class="steps">
+      <li>Heat 1 tsp oil. Sauté chopped onion, chilli, then tomato + turmeric + salt.</li>
+      <li>Crack in 3 eggs, scramble and stir-cook 3–4 min until fully done — that's egg bhurji.</li>
+      <li>Make or reheat 2 wheat rotis.</li>
+      <li>Chop cucumber, onion, tomato into a quick salad with a pinch of salt and lemon.</li>
+      <li>Eat the bhurji with roti and salad on the side.</li>
+    </ol>
+    <div class="tip"><strong>Tip:</strong> Keep dinner carbs light. Swap to 1 roti if you want a steeper deficit on rest days.</div>
+  </div>
+
+  <div class="day-total">
+    <div class="dt-label">DAY TOTAL</div>
+    <div class="dt-metrics">
+      <div class="dtm"><div class="dtm-v" style="color:var(--accent3)">~1750</div><div class="dtm-k">kcal</div></div>
+      <div class="dtm"><div class="dtm-v" style="color:var(--protein)">~124g</div><div class="dtm-k">Protein</div></div>
+      <div class="dtm"><div class="dtm-v" style="color:var(--accent)">₹215</div><div class="dtm-k">Cost</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOPPING LIST -->
+<div id="p-shop" class="panel">
+  <div class="panel-head"><div class="panel-title">SHOPPING LIST</div><div class="panel-sub">~1 week of supplies · approximate Indian prices</div></div>
+  <div class="card">
+    <h3>🥚 Proteins</h3>
+    <table class="shop-table">
+      <tr><th>Item</th><th>Qty</th><th style="text-align:right">Price</th></tr>
+      <tr><td>Eggs</td><td>30 (tray)</td><td class="price">₹210</td></tr>
+      <tr><td>Chicken breast</td><td>1 kg</td><td class="price">₹260</td></tr>
+      <tr><td>Curd / Dahi</td><td>1 kg</td><td class="price">₹70</td></tr>
+      <tr><td>Moong / Toor dal</td><td>500g</td><td class="price">₹70</td></tr>
+      <tr><td>Roasted chana</td><td>500g</td><td class="price">₹60</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>🌾 Carbs &amp; Staples</h3>
+    <table class="shop-table">
+      <tr><th>Item</th><th>Qty</th><th style="text-align:right">Price</th></tr>
+      <tr><td>Oats</td><td>1 kg</td><td class="price">₹150</td></tr>
+      <tr><td>Rice</td><td>1 kg</td><td class="price">₹60</td></tr>
+      <tr><td>Wheat flour (atta)</td><td>1 kg</td><td class="price">₹50</td></tr>
+      <tr><td>Banana</td><td>1 dozen</td><td class="price">₹50</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>🧅 Veg &amp; Basics</h3>
+    <table class="shop-table">
+      <tr><th>Item</th><th>Qty</th><th style="text-align:right">Price</th></tr>
+      <tr><td>Onion + tomato</td><td>1 kg each</td><td class="price">₹80</td></tr>
+      <tr><td>Cucumber</td><td>½ kg</td><td class="price">₹25</td></tr>
+      <tr><td>Cooking oil</td><td>shared</td><td class="price">₹40</td></tr>
+      <tr><td>Spices, ginger-garlic, salt</td><td>shared</td><td class="price">₹60</td></tr>
+    </table>
+  </div>
+  <div class="shop-total"><span class="stl">Weekly Total (approx)</span><span class="stv">~₹1575</span></div>
+  <div class="tip" style="margin-top:14px"><strong>That's ~₹225/day.</strong> Prices vary by city and season. Buy chicken and eggs in bulk and freeze/refrigerate to hit the lowest cost.</div>
+</div>
+
+<!-- RULES & SWAPS -->
+<div id="p-rules" class="panel">
+  <div class="panel-head"><div class="panel-title">RULES &amp; SWAPS</div><div class="panel-sub">Keep it simple, keep it consistent</div></div>
+  <div class="card">
+    <h3>✅ Daily Rules</h3>
+    <div class="rule"><span class="ri">💧</span><div><strong>Water:</strong> 3–4 litres a day. Often "hunger" is thirst. Drink a glass before each meal.</div></div>
+    <div class="rule"><span class="ri">🍳</span><div><strong>Protein every meal:</strong> Aim for a protein source (egg/chicken/curd/dal) in all 4 meals.</div></div>
+    <div class="rule"><span class="ri">🧂</span><div><strong>Low oil:</strong> Max 1 tsp oil per cooked meal. Grill or boil instead of frying.</div></div>
+    <div class="rule"><span class="ri">🚫</span><div><strong>Avoid:</strong> Sugary drinks, fried snacks, biscuits, white bread, packaged juice. These are cheap calories with no protein.</div></div>
+    <div class="rule"><span class="ri">😴</span><div><strong>No late eating:</strong> Finish dinner ~2 hours before bed.</div></div>
+    <div class="rule"><span class="ri">📊</span><div><strong>Weigh weekly:</strong> Same day, morning, empty stomach. Judge the trend over weeks.</div></div>
+  </div>
+  <div class="card">
+    <h3>🔄 Cheap Swaps</h3>
+    <div class="rule"><span class="ri">🐟</span><div><strong>Chicken →</strong> small fish (sardine/mackerel) when cheaper locally — great protein and omega-3.</div></div>
+    <div class="rule"><span class="ri">🫘</span><div><strong>Meat-free day →</strong> double the dal + add rajma/chole + paneer 100g for protein.</div></div>
+    <div class="rule"><span class="ri">🥛</span><div><strong>Curd →</strong> if you can stretch budget, add skimmed milk; cheap protein and calcium.</div></div>
+    <div class="rule"><span class="ri">🌾</span><div><strong>Oats →</strong> daliya (broken wheat) or poha are cheaper and work the same way.</div></div>
+  </div>
+  <div class="card">
+    <h3>⚡ On Gym Days vs Rest Days</h3>
+    <div class="rule"><span class="ri">🏋️</span><div><strong>Gym day:</strong> Eat the snack (curd + banana + chana) for workout energy. Keep carbs as planned.</div></div>
+    <div class="rule"><span class="ri">🛋️</span><div><strong>Rest day:</strong> Drop to 1 roti at dinner and skip the banana to create a slightly bigger deficit.</div></div>
+  </div>
+  <div class="tip"><strong>Most important:</strong> Consistency beats perfection. Hitting this 6 out of 7 days every week is what drives results — not being flawless for 3 days then quitting.</div>
+</div>
+
+<footer>DARSHAN'S DIET BLUEPRINT — LOW COST · HIGH PROTEIN 🥗 — Not medical advice; adjust portions to how you feel &amp; progress.</footer>
+
+<script>
+  function show(t){
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.getElementById('p-'+t).classList.add('active');
+    var tabs=['day','shop','rules'];
+    document.querySelectorAll('.tab')[tabs.indexOf(t)].classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
